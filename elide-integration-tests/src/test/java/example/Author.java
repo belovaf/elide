@@ -48,4 +48,8 @@ public class Author extends BaseId {
     public void setBooks(Collection<Book> books) {
         this.books = books;
     }
+
+    public String toString() {
+        return "Author: " + id;
+    }
 }

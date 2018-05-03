@@ -23,16 +23,18 @@ public class AccessIT extends AbstractIntegrationTestInitializer {
     public void verifySession() throws IOException {
         try (DataStoreTransaction tx = dataStore.beginTransaction()) {
             tx.commit(null);
+            tx.close();
         }
     }
 
     @Test
-    public void accessParentBean() {
+    public void accessParentBean() throws Exception {
         DataStoreTransaction tx = dataStore.beginTransaction();
         Parent parent = new Parent();
         parent.setChildren(new HashSet<>());
         parent.setSpouses(new HashSet<>());
         tx.createObject(parent, null);
         tx.commit(null);
+        tx.close();
     }
 }

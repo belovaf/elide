@@ -73,7 +73,7 @@ public class ResourceIT extends AbstractIntegrationTestInitializer {
     private final JsonParser jsonParser = new JsonParser();
 
     @BeforeClass
-    public static void setup() {
+    public static void setup() throws Exception {
         DataStoreTransaction tx = dataStore.beginTransaction();
 
         Parent parent = new Parent(); // id 1
@@ -108,10 +108,6 @@ public class ResourceIT extends AbstractIntegrationTestInitializer {
 
         p1.setChildren(childrenSet1);
 
-        tx.createObject(p1, null);
-        tx.createObject(c1, null);
-        tx.createObject(c2, null);
-
         // List tests
         Parent p2 = new Parent(); // id 3
         Parent p3 = new Parent();  // id 4
@@ -132,10 +128,14 @@ public class ResourceIT extends AbstractIntegrationTestInitializer {
         p3.setSpouses(Sets.newHashSet());
         p3.setChildren(Sets.newHashSet());
 
-        tx.createObject(p2, null);
-        tx.createObject(p3, null);
+        tx.createObject(c1, null);
+        tx.createObject(c2, null);
         tx.createObject(c3, null);
         tx.createObject(c4, null);
+
+        tx.createObject(p1, null);
+        tx.createObject(p2, null);
+        tx.createObject(p3, null);
 
         Book bookWithPercentage = new Book();
         bookWithPercentage.setTitle("titlewith%percentage");
@@ -165,6 +165,7 @@ public class ResourceIT extends AbstractIntegrationTestInitializer {
         tx.createObject(etb, null);
 
         tx.commit(null);
+        tx.close();
     }
 
     @Test(priority = -1)
@@ -1328,8 +1329,7 @@ public class ResourceIT extends AbstractIntegrationTestInitializer {
         Assert.assertEquals(errors.size(), 1);
 
         String error = errors.get(0).asText();
-        String expected = "TransactionException: Duplicate entry 'duplicate' for key 'name'";
-        Assert.assertTrue(error.equals(expected), "Error does not equal with '" + expected + "'");
+        Assert.assertTrue(error.startsWith("TransactionException"));
     }
 
     @Test(priority = 29)

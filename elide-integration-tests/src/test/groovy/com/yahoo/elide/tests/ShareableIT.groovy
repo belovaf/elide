@@ -26,6 +26,7 @@ class ShareableIT extends AbstractIntegrationTestInitializer {
         Left left = new Left();
         tx.createObject(left, null);
         tx.commit(null);
+        tx.close();
     }
 
     @Test

@@ -131,4 +131,8 @@ public class Book extends BaseId {
     public void setPublisher(Publisher publisher) {
         this.publisher = publisher;
     }
+
+    public String toString() {
+        return "Book: " + id;
+    }
 }
